@@ -64,16 +64,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       const Text("Email Adresse"),
                       const Spacer(),
                       Container(
-                        height: 35,
-                        decoration: const BoxDecoration(
-                            border: Border(bottom: BorderSide())),
+                        height: 75,
                         child: TextFormField(
                           autovalidateMode: AutovalidateMode.onUserInteraction,
-                          keyboardType: TextInputType.text,
+                          keyboardType: TextInputType.emailAddress,
                           validator: validateEmail,
+                          key: const Key("email"),
                           style: const TextStyle(),
                           decoration: const InputDecoration(
                               hintText: "My Renault Email Adresse",
+                              counterText: ' ',
                               suffixIcon: Icon(
                                 Icons.mail,
                               )),
@@ -83,13 +83,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       const Text("Passwort"),
                       const Spacer(),
                       Container(
-                          height: 35,
-                          decoration: const BoxDecoration(
-                              border: Border(bottom: BorderSide())),
+                          height: 75,
                           child: TextFormField(
                             obscureText: !_passwordVisible,
                             enableSuggestions: false,
                             autocorrect: false,
+                            key: const Key("password"),
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                             validator: validatePassword,
