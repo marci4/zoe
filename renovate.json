@@ -4,7 +4,8 @@
     "config:recommended"
   ],
   {
- "gradle": {
+   "gradle": {
     "enabled": false
   }
+}
 }
