@@ -1,0 +1,12 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+   "gradle": {
+    "enabled": false
+  },
+   "gradle-wrapper": {
+    "enabled": false
+  }
+}
