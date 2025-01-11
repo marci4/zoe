@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<StatefulWidget> createState() => _LoginScreenState();
@@ -9,6 +9,10 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool _passwordVisible = false;
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  String? _email = null;
+  String? _password = null;
 
   @override
   void initState() {
@@ -40,86 +44,111 @@ class _LoginScreenState extends State<LoginScreen> {
       return null;
     }
 
+    isButtonEnabled() {
+      return _email != null &&
+          _password != null &&
+          formKey.currentState != null &&
+          formKey.currentState!.validate();
+    }
+
+    Function()? onPressed() {
+      if (formKey.currentState!.validate()) {
+        return () {
+          formKey.currentState!.save();
+        };
+      }
+      return () {};
+    }
+
+    ;
+
     return Scaffold(
         body: Container(
             height: 400,
             width: double.infinity,
-            margin: const EdgeInsets.symmetric(horizontal: 30),
+            margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 100),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.white),
               borderRadius: BorderRadius.circular(15),
               color: Colors.black.withOpacity(0.1),
             ),
-            child: Padding(
-                padding: const EdgeInsets.all(25),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Spacer(),
-                      Center(
-                          child: Text("Login to My Renault",
-                              style: TextStyle(
-                                  fontSize: 30, fontWeight: FontWeight.bold))),
-                      const Spacer(),
-                      const Text("Email Adresse"),
-                      const Spacer(),
-                      Container(
-                        height: 75,
-                        child: TextFormField(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          keyboardType: TextInputType.emailAddress,
-                          validator: validateEmail,
-                          key: const Key("email"),
-                          style: const TextStyle(),
-                          decoration: const InputDecoration(
-                              hintText: "My Renault Email Adresse",
-                              counterText: ' ',
-                              suffixIcon: Icon(
-                                Icons.mail,
-                              )),
-                        ),
-                      ),
-                      const Spacer(),
-                      const Text("Passwort"),
-                      const Spacer(),
-                      Container(
-                          height: 75,
-                          child: TextFormField(
-                            obscureText: !_passwordVisible,
-                            enableSuggestions: false,
-                            autocorrect: false,
-                            key: const Key("password"),
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            validator: validatePassword,
-                            decoration: InputDecoration(
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  _passwordVisible
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                ),
-                                onPressed: () {
-                                  // Update the state i.e. toogle the state of passwordVisible variable
-                                  setState(() {
-                                    _passwordVisible = !_passwordVisible;
-                                  });
-                                },
-                              ),
-                              hintText: "My Renault Passwort",
+            child: Form(
+                key: formKey,
+                child: Padding(
+                    padding: const EdgeInsets.all(25),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Spacer(),
+                          Center(
+                              child: Text("Login to My Renault",
+                                  style: TextStyle(
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.bold))),
+                          const Spacer(),
+                          const Spacer(),
+                          const Text("Email Adresse"),
+                          const Spacer(),
+                          SizedBox(
+                            height: 75,
+                            child: TextFormField(
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              keyboardType: TextInputType.emailAddress,
+                              onChanged: (value) =>
+                                  setState(() => _email = value),
+                              validator: validateEmail,
+                              key: const Key("email"),
+                              style: const TextStyle(),
+                              decoration: const InputDecoration(
+                                  hintText: "My Renault Email Adresse",
+                                  counterText: ' ',
+                                  suffixIcon: Icon(
+                                    Icons.mail,
+                                  )),
                             ),
-                          )),
-                      const Spacer(),
-                      Container(
-                        height: 40,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          color: Colors.white,
-                        ),
-                        alignment: Alignment.center,
-                        child: Text("Log In"),
-                      )
-                    ]))));
+                          ),
+                          const Spacer(),
+                          const Text("Passwort"),
+                          const Spacer(),
+                          SizedBox(
+                              height: 75,
+                              child: TextFormField(
+                                obscureText: !_passwordVisible,
+                                enableSuggestions: false,
+                                onChanged: (value) =>
+                                    setState(() => _password = value),
+                                autocorrect: false,
+                                key: const Key("password"),
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                validator: validatePassword,
+                                decoration: InputDecoration(
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      _passwordVisible
+                                          ? Icons.visibility
+                                          : Icons.visibility_off,
+                                    ),
+                                    onPressed: () {
+                                      // Update the state i.e. toogle the state of passwordVisible variable
+                                      setState(() {
+                                        _passwordVisible = !_passwordVisible;
+                                      });
+                                    },
+                                  ),
+                                  hintText: "My Renault Passwort",
+                                ),
+                              )),
+                          const Spacer(),
+                          SizedBox(
+                            height: 40,
+                            width: double.infinity,
+                            child: FilledButton(
+                                onPressed: isButtonEnabled() ? onPressed : null,
+                                statesController: WidgetStatesController(),
+                                child: const Text("Log In")),
+                          )
+                        ])))));
   }
 }
